@@ -19,6 +19,12 @@ class User {
     }
     return { success: false, msg: "Wrong id!" };
   }
+
+  register() {
+    const body = this.body;
+    const response = UserStorage.save(body);
+    return response;
+  }
 }
 
 module.exports = User;

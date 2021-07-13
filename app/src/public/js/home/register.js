@@ -9,13 +9,22 @@ const registerBtn = document.querySelector("button");
 registerBtn.addEventListener("click", register);
 
 function register() {
+  if (!id.value) {
+    return alert("Input id!");
+  }
+  if (!password.value) {
+    return alert("Input password!");
+  }
+  if (password.value !== confirm.value) {
+    return alert("Wrong confirm password!");
+  }
+
   const req = {
     id: id.value,
     name: name.value,
     password: password.value,
-    confirm: confirm.value,
   }
-  
+
   fetch("/register", {
     method: "POST",
     headers: {
