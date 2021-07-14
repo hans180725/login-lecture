@@ -14,16 +14,25 @@ class UserStorage {
     return userInfo;
   }
 
-  static getUsers(...fields) {
-    // const users = this.#users;
+  static #getUsers(data, fields) {
+    const users = JSON.parse(data);
     const newUsers = fields.reduce((newUsers, field) => {
       if (users.hasOwnProperty(field)) {
         newUsers[field] = users[field];
       }
       return newUsers;
     }, {});
-    console.log(newUsers);
+
     return newUsers;
+  }
+
+  static getUsers(...fields) {
+    return fs
+      .readFile("./src/databases/users.json")
+      .then((data) => {
+        return this.#getUsers(data, fields);
+      })
+      .catch(console.error);
   }
 
   static getUserInfo(id) {
@@ -35,11 +44,16 @@ class UserStorage {
       .catch(console.error);
   }
 
-  static save(userInfo) {
-    // const users = this.#users;
+  static async save(userInfo) {
+    const users = await this.getUsers("id", "password", "name");
+    if (users.id.includes(userInfo.id)) {
+      throw "Exist id!";
+    }
     users.id.push(userInfo.id);
     users.name.push(userInfo.name);
     users.password.push(userInfo.password);
+    fs.writeFile("./src/databases/users.json", JSON.stringify(users));
+
     return { success: true };
   }
 }
