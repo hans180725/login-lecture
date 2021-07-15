@@ -12,6 +12,9 @@ const accessLogStream = require("./src/config/log");
 
 const home = require("./src/routes/home");
 
+const logger = require("./src/config/logger");
+logger.error("Hello!");
+
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
 app.use(express.static(`${__dirname}/src/public`));
